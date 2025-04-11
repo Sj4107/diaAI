@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diabetes Prediction Result</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  {% load static %}
+  <style>
+   
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      width: 90%;
+      max-width: 1200px;
+      background: white;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 40px auto;
+    }
+
+    .left {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .right {
+      flex: 1;
+      background: url("{% static 'diabetes\result.jpeg' %}") no-repeat center;
+      background-size: contain;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 4rem;
+      margin: 20px 0;
+      font-weight: 600;
+    }
+
+    .positive {
+      color: #d32f2f;
+    }
+
+    .negative {
+      color: #388e3c;
+    }
+
+    p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 12px 25px;
+      background-color: #00796b;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      align-self: flex-start;
+    }
+
+    button:hover {
+      background-color: #004d40;
+    }
+
+    footer {
+      background-color: #004d40;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+      font-size: 0.95rem;
+    }
+
+    footer a {
+      color: #b2dfdb;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .right {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <div class="left">
+      <h2>Hello {{ name }}!</h2>
+      <p>Here’s a detailed summary based on your inputs:</p>
+      <h1 class="{% if result == 'Yes' %}positive{% else %}negative{% endif %}">{{ result }}</h1>
+
+      {% if result == 'Yes' %}
+        <p>It looks like you may be at risk for diabetes. This doesn’t mean you definitely have it, but it’s a signal to take preventive action.</p>
+        <p>✅ Schedule a visit with a healthcare provider to confirm with proper testing.</p>
+        <p>🍎 Adopt a balanced, low-sugar diet with plenty of fiber, whole grains, and vegetables.</p>
+        <p>🏃‍♂️ Aim for at least 30 minutes of moderate exercise, 5 days a week.</p>
+        <p>🧘‍♀️ Manage stress through mindfulness, yoga, or meditation to support healthy blood sugar levels.</p>
+        <p>🩺 Monitor your health and track blood sugar levels regularly.</p>
+      {% else %}
+        <p>Great news! Based on the data you provided, there are no strong signs of diabetes risk.</p>
+        <p>💪 Keep up the great work by staying active and maintaining a healthy diet.</p>
+        <p>🧘‍♂️ Manage stress well and ensure you get enough restful sleep.</p>
+        <p>💧 Stay hydrated and avoid excessive sugar and processed food intake.</p>
+        <p>🩺 Routine check-ups are still essential to stay on top of your health.</p>
+      {% endif %}
+
+      <button onclick="downloadPDF()">Download PDF</button>
+    </div>
+
+    <div class="right">
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 DiaAI | Designed with ❤️ for your health.
+    <br>
+    <a href="/">Home</a> |
+    <a href="/about">About</a> | 
+    <a href="/contact">Contact</a>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const name = "{{ name }}";
+      const result = "{{ result }}";
+      const isPositive = result === "Yes";
+
+      let advice = `Name: ${name}\nPrediction Result: ${result}\n\n`;
+
+      if (isPositive) {
+        advice += "You may be at risk for diabetes. Consider the following:\n";
+        advice += "- Consult your healthcare provider.\n";
+        advice += "- Adopt a healthy, low-sugar diet.\n";
+        advice += "- Exercise regularly.\n";
+        advice += "- Manage stress levels.\n";
+        advice += "- Monitor blood sugar and health indicators.\n";
+      } else {
+        advice += "You are currently not at high risk. To stay healthy:\n";
+        advice += "- Maintain your healthy lifestyle.\n";
+        advice += "- Eat balanced meals.\n";
+        advice += "- Stay active.\n";
+        advice += "- Get regular check-ups.\n";
+      }
+
+      doc.text(advice, 20, 20);
+      doc.save(`${name}_diabetes_result.pdf`);
+    }
+  </script>
+</body>
+</html>

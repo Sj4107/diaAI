@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diabetes Predictor</title>
+  {% load static %}
+  <style>
+    /* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  background: url("{% static 'diabetes/diabetes-service.jpeg' %}") center/cover no-repeat fixed;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Overlay */
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  z-index: -1;
+}
+
+/* Anchor Tags */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 1rem 2rem;
+  background-color: transparent;
+  z-index: 999;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+header.scrolled {
+  background-color: #ffffff97;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo a {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2a9df4;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  background-color: transparent;
+  color: #fff;
+}
+
+.nav-links a:hover,
+.nav-links .active {
+  background-color: #ffffffc4;
+  color: #2a9df4;
+}
+
+/* Hero Section */
+.hero {
+  padding: 8rem 2rem 5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+.hero-content {
+  max-width: 700px;
+  margin: 0 auto;
+  animation: fadeInUp 1.2s ease;
+  padding-top: 150px;
+}
+.hero-content h1 {
+  font-size: 3.2rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  color: #f2f2f2;
+}
+
+.btn {
+  background-color: #fff;
+  color: #2a9df4;
+  padding: 1rem 2.2rem;
+  font-size: 1rem;
+  border-radius: 40px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+  background-color: #e6f2ff;
+  transform: translateY(-2px);
+}
+
+/* Sections */
+section {
+  padding: 5rem 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+section h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  color: #2a9df4;
+  margin-bottom: 2rem;
+}
+
+.about p {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #f8f8f8;
+}
+
+.features li,
+.testimonial,
+.faq-item {
+  background: #ffffffdd;
+  padding: 1.5rem;
+  border-left: 5px solid #2a9df4;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-size: 1.1rem;
+}
+
+/* Testimonials */
+.testimonial {
+  font-style: italic;
+}
+
+.testimonial span {
+  display: block;
+  margin-top: 0.75rem;
+  font-weight: bold;
+  color: #2a9df4;
+  font-size: 1rem;
+}
+
+/* FAQ */
+.faq-item h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: #222;
+}
+
+/* Footer */
+footer {
+  background-color: #2a9df4;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1rem;
+  margin-top: 3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    background-color: #2a9df4;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    display: none;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links li {
+    text-align: center;
+    margin: 1rem 0;
+  }
+
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-content p {
+    font-size: 1.1rem;
+  }
+
+  section h2 {
+    font-size: 2rem;
+  }
+
+  .btn {
+    font-size: 1rem;
+    padding: 0.9rem 2rem;
+  }
+}
+/* Fix #about anchor scroll offset */
+#about {
+  scroll-margin-top: 80px;
+}
+
+/* Center hero content with animation */
+.hero-content {
+  max-width: 700px;
+  margin: 0 auto;
+  animation: fadeInUp 1.2s ease;
+}
+
+/* Fade in from bottom */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo"><a href="#">DiaAI</a></div>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="contact">Contact us</a></li>
+      </ul>
+    </nav>
+  </header> 
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Diabetes Prediction System</h1>
+      <p>Track, monitor and predict diabetes easily with our smart AI-powered system.</p>
+      <a href="predict" class="btn">Get Started</a>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <h2>How Does It Work?</h2>
+    <p>We use patient health data and advanced algorithms to analyze diabetes risk factors. With our system, early detection and intervention becomes possible in just a few clicks.</p>
+  </section>
+
+  <section class="features">
+    <h2>Features</h2>
+    <ul>
+      <li><strong>Real-time Prediction:</strong> Get instant results based on input data.</li>
+      <li><strong>User-Friendly Interface:</strong> Simple and intuitive design for everyone.</li>
+      <li><strong>Data Privacy:</strong> Your health data is secure and confidential.</li>
+      <li><strong>Detailed Reports:</strong> Understand the risks and get actionable insights.</li>
+    </ul>
+  </section>
+
+  <section class="testimonials">
+    <h2>What Users Say</h2>
+    <div class="testimonial">
+      <p>"This tool helped me catch early signs of diabetes. Super helpful!"</p>
+      <span>- Anjali M., Mumbai</span>
+    </div>
+    <div class="testimonial">
+      <p>"As a doctor, it's a quick and effective way to assess patients."</p>
+      <span>- Dr. Patel, Ahmedabad</span>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <h4>Is this system medically approved?</h4>
+      <p>This is an AI-based assistance tool and not a replacement for professional diagnosis. Always consult a doctor for medical advice.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Do I need to register to use it?</h4>
+      <p>No, you can try predictions without registration. However, signing up enables saving results.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Is my data safe?</h4>
+      <p>Yes. All data is encrypted and not shared with any third parties.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 DiabetesPredict. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', function () {
+      const header = document.querySelector('header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+  </script>
+</body>
+</html>
